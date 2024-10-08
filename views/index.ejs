@@ -3,20 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code with Logo Generator</title>
+  <title>QR Code Generator | Aravind</title>
 </head>
 <body>
-  <h1>Generate QR Code with Logo</h1>
-
+  <h1>QR Code Generator</h1>
+  
   <form action="/generate" method="POST">
-    <label for="text">Enter text to generate QR code:</label><br>
-    <input type="text" name="text" id="text" required><br><br>
+    <label for="text">Enter text for QR code:</label>
+    <input type="text" name="text" id="text" required>
+    
+    <br><br>
+    
+    <label for="filename">Enter file name (optional):</label>
+    <input type="text" name="filename" id="filename" placeholder="Enter file name without extension">
+    
+    <br><br>
+    
     <button type="submit">Generate QR Code</button>
   </form>
 
   <% if (qrCodeImage) { %>
-    <h2>Generated QR Code for "<%= text %>":</h2>
+    <!-- <h2>Generated QR Code for "<%= text %>":</h2> -->
     <img src="<%= qrCodeImage %>" alt="QR Code with Logo">
+
+    <!-- Download button with dynamic name based on input or default name -->
+    <a href="<%= qrCodeImage %>" download="<%= filename ? filename.replace(/\s+/g, '_') : 'qr_code' %>.png">
+      <button>Download QR Code</button>
+    </a>
   <% } %>
+
 </body>
 </html>
