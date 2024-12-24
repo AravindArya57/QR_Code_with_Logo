@@ -18,9 +18,9 @@ router.post('/generate', async (req, res) => {
   const outputImagePath = path.join(__dirname, '../public/qrcodes', `${Date.now()}_qr_with_logo.png`);
 
   try {
-    // Generate QR code with larger size
     await QRCode.toFile(qrImagePath, text, {
-      width: 400,  // Increase the size of the QR code (e.g., 600px)
+      width: 400,
+      errorCorrectionLevel: 'H', // High error correction level
     });
 
     // Load the generated QR code and logo images using Jimp
@@ -28,10 +28,15 @@ router.post('/generate', async (req, res) => {
     let logo = await Jimp.read(logoPath);
 
     // Resize the logo to fit in the center of the QR code
-    logo.resize(qrImage.bitmap.width / 4, Jimp.AUTO);
+    logo.resize(qrImage.bitmap.width / 5, Jimp.AUTO);
 
     // Create a white background the same size as the logo
-    const whiteBackground = new Jimp(logo.bitmap.width, logo.bitmap.height, 0xffffffff); // white background
+    // Add transparency to the white background (e.g., 90% opacity)
+    const whiteBackground = new Jimp(
+      logo.bitmap.width,
+      logo.bitmap.height,
+      Jimp.rgbaToInt(255, 255, 255, 230) // RGBA format
+    );
 
     // Composite the logo on top of the white background
     whiteBackground.composite(logo, 0, 0);
